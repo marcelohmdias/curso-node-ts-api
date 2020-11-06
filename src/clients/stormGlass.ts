@@ -1,6 +1,7 @@
-import axios, { AxiosStatic } from 'axios'
+import config, { IConfig } from 'config'
 
 import { InternalError } from '@src/util/errors/internal-error'
+import * as HTTPUtil from '@src/util/request'
 
 export interface StormGlassPointSource {
   [key: string]: number
@@ -33,6 +34,11 @@ export interface ForecastPoint {
 }
 
 /**
+ * We could have proper type for the configuration
+ */
+const resourceConfig: IConfig = config.get('App.resources.StormGlass')
+
+/**
  * This error type is used when a request reaches out to the StormGlass API but returns an error
  */
 export class StormGlassUnexpectedResponseError extends InternalError {
@@ -63,7 +69,7 @@ export class StormGlassResponseError extends InternalError {
 }
 
 export class StormGlass {
-  readonly urlBase = 'https://api.stormglass.io/v2/weather/point'
+  readonly urlBase = `${resourceConfig.get('apiUrl')}/weather/point`
   readonly apiSource = 'noaa'
   readonly apiParams = [
     'swellDirection',
@@ -76,7 +82,7 @@ export class StormGlass {
   ].join('')
 
   // eslint-disable-next-line no-useless-constructor
-  constructor(protected request: AxiosStatic = axios) {}
+  constructor(protected request = new HTTPUtil.Request()) {}
 
   private isValidPoint(point: Partial<StormGlassPoint>): boolean {
     return !!(
@@ -121,8 +127,7 @@ export class StormGlass {
 
       const response = await this.request.get<StormGlassForecastResponse>(url, {
         headers: {
-          Authorization:
-            'fcdd0022-1fc9-11eb-a5cd-0242ac130002-fcdd00b8-1fc9-11eb-a5cd-0242ac130002'
+          Authorization: resourceConfig.get('apiToken')
         }
       })
 
@@ -131,7 +136,7 @@ export class StormGlass {
       /**
        * This is handling the Axios errors specifically
        */
-      if (err.response && err.response.status) {
+      if (HTTPUtil.Request.isRequestError(err)) {
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${
             err.response.status
