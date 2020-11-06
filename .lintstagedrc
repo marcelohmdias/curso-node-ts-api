@@ -1,6 +1,6 @@
 {
   "*.ts": [
     "yarn lint:fix",
-    "yarn test --bail --findRelatedTests --ci"
+    "yarn test:unit --bail --findRelatedTests --ci"
   ]
 }
