@@ -42,7 +42,6 @@ const resourceConfig: IConfig = config.get('App.resources.StormGlass')
  * This error type is used when a request reaches out to the StormGlass API but returns an error
  */
 export class StormGlassUnexpectedResponseError extends InternalError {
-  // eslint-disable-next-line no-useless-constructor
   constructor(message: string) {
     super(message)
   }
@@ -81,7 +80,6 @@ export class StormGlass {
     'windSpeed'
   ].join('')
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(protected request = new HTTPUtil.Request()) {}
 
   private isValidPoint(point: Partial<StormGlassPoint>): boolean {
@@ -118,10 +116,7 @@ export class StormGlass {
       .map(this.mapForecastPoint.bind(this))
   }
 
-  public async fetchPoints(
-    lat: number,
-    lng: number
-  ): Promise<ForecastPoint[] | StormGlassResponseError | ClientRequestError> {
+  public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
       const url = `${this.urlBase}?lat=${lat}&&lng=${lng}&params=${this.apiParams}&source=${this.apiSource}`
 

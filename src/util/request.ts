@@ -7,7 +7,6 @@ export interface RequestConfig extends AxiosRequestConfig {}
 export interface Response<T = any> extends AxiosResponse<T> {}
 
 export class Request {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private request = axios) {}
 
   public get<T>(url: string, config: RequestConfig = {}): Promise<Response<T>> {

@@ -38,6 +38,7 @@ module.exports = {
     ],
     'no-console': isProd ? 'error' : 'off',
     'no-debugger': isProd ? 'error' : 'off',
+    'no-useless-constructor': 'off',
     'prettier/prettier': 'warn'
   }
 }
