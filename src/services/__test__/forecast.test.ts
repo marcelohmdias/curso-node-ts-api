@@ -1,7 +1,6 @@
 import { StormGlass } from '@src/clients/stormGlass'
+import { Beach, BeachPosition } from '@src/models/beach'
 import {
-  Beach,
-  BeachPosition,
   Forecast,
   ForecastProcessingInternalError
 } from '@src/services/forecast'
