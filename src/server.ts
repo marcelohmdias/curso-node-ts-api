@@ -6,6 +6,7 @@ import { Application } from 'express'
 
 import { BeachesController } from '@src/controllers/beaches'
 import { ForecastController } from '@src/controllers/forecast'
+import { UsersController } from '@src/controllers/users'
 import * as database from '@src/database'
 
 export class SetupServer extends Server {
@@ -19,7 +20,11 @@ export class SetupServer extends Server {
   }
 
   private setupControllers(): void {
-    this.addControllers([new BeachesController(), new ForecastController()])
+    this.addControllers([
+      new BeachesController(),
+      new ForecastController(),
+      new UsersController()
+    ])
   }
 
   private async databaseSetup(): Promise<void> {
